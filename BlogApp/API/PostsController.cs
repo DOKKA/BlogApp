@@ -5,16 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
+using BlogApp.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogApp.API
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class PostsController : Controller
     {
+
+        private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _manager;
+
+        public PostsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> manager)
+        {
+            _dbContext = dbContext;
+            _manager = manager;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
+            var user = await  _manager.GetUserAsync(User);
+
+            _dbContext.Posts.Add(new Post("First real post", "A post body", user));
+            _dbContext.SaveChanges();
             return new string[] { "value1", "value2" };
         }
 
