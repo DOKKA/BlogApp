@@ -7,56 +7,57 @@ using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
 using BlogApp.Data;
 using Microsoft.AspNetCore.Identity;
+using BlogApp.Services;
+using BlogApp.Models.PostViewModels;
 
 namespace BlogApp.API
 {
     [Route("api/[controller]")]
     public class PostsController : Controller
     {
-
-        private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _manager;
+        private readonly PostService _postService;
 
-        public PostsController(ApplicationDbContext dbContext, UserManager<ApplicationUser> manager)
+        public PostsController(UserManager<ApplicationUser> manager, PostService postService)
         {
-            _dbContext = dbContext;
             _manager = manager;
+            _postService = postService;
         }
 
         // GET api/values
         [HttpGet]
-        public async Task<IEnumerable<string>> Get()
+        public  IEnumerable<ListViewModel> Get()
         {
-            var user = await  _manager.GetUserAsync(User);
-
-            _dbContext.Posts.Add(new Post("First real post", "A post body", user));
-            _dbContext.SaveChanges();
-            return new string[] { "value1", "value2" };
+            return _postService.GetAll();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ListViewModel Get(long id)
         {
-            return "value";
+            return _postService.Get(id);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async void Post([FromBody]CreateViewModel model)
         {
+            model.User =  await _manager.GetUserAsync(User);
+            _postService.Create(model);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(long id, [FromBody]UpdateViewModel model)
         {
+            _postService.Update(model);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(long id)
         {
+            _postService.Delete(id);
         }
     }
 }

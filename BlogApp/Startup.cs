@@ -37,6 +37,7 @@ namespace BlogApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<PostService>();
 
             services.AddMvc();
         }

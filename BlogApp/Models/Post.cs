@@ -10,18 +10,6 @@ namespace BlogApp.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class Post
     {
-        public Post()
-        {
-
-        }
-        public Post(string title, string body, ApplicationUser user)
-        {
-            PostTitle = title;
-            PostBody = body;
-            PostDate = DateTime.Now;
-            User = user;
-        }
-
         [Key]
         public long PostId { get; set; }
 
