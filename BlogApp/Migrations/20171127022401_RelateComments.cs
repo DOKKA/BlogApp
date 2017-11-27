@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BlogApp.Migrations
 {
-    public partial class AddBlog : Migration
+    public partial class RelateComments : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -154,37 +154,16 @@ namespace BlogApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    CommentId = table.Column<long>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CommentDate = table.Column<DateTime>(nullable: false),
-                    CommentText = table.Column<string>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    UserId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.CommentId);
-                    table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     PostId = table.Column<long>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    PostBody = table.Column<string>(nullable: true),
                     PostDate = table.Column<DateTime>(nullable: false),
                     PostTitle = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,7 +173,36 @@ namespace BlogApp.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    CommentId = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CommentDate = table.Column<DateTime>(nullable: false),
+                    CommentText = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    PostId = table.Column<long>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.CommentId);
+                    table.ForeignKey(
+                        name: "FK_Comments_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "PostId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -235,6 +243,11 @@ namespace BlogApp.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_PostId",
+                table: "Comments",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
                 table: "Comments",
                 column: "UserId");
@@ -266,10 +279,10 @@ namespace BlogApp.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -80,9 +80,14 @@ namespace BlogApp.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<string>("UserId");
+                    b.Property<long>("PostId");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("CommentId");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -102,7 +107,8 @@ namespace BlogApp.Migrations
 
                     b.Property<string>("PostTitle");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("PostId");
 
@@ -220,16 +226,23 @@ namespace BlogApp.Migrations
 
             modelBuilder.Entity("BlogApp.Models.Comment", b =>
                 {
+                    b.HasOne("BlogApp.Models.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("BlogApp.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BlogApp.Models.Post", b =>
                 {
                     b.HasOne("BlogApp.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -13,10 +13,14 @@ namespace BlogApp.Models
         [Key]
         public long CommentId { get; set; }
 
+        public long PostId { get; set; }
+        public virtual Post Post { get; set; }
+
         public string CommentText { get; set; }
         public DateTime CommentDate { get; set; }
         public bool IsDeleted { get; set; }
 
+        [Required]
         public ApplicationUser User { get; set; }
     }
 }

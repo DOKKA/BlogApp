@@ -18,6 +18,9 @@ namespace BlogApp.Models
         public DateTime PostDate { get; set; }
         public bool IsDeleted { get; set; }
 
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        [Required]
         public ApplicationUser User { get; set; }
     }
 }

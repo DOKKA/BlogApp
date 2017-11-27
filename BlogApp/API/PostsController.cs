@@ -24,21 +24,21 @@ namespace BlogApp.API
             _postService = postService;
         }
 
-        // GET api/values
+        // GET api/posts
         [HttpGet]
         public  IEnumerable<ListViewModel> Get()
         {
             return _postService.GetAll();
         }
 
-        // GET api/values/5
+        // GET api/posts/5
         [HttpGet("{id}")]
         public ListViewModel Get(long id)
         {
             return _postService.Get(id);
         }
 
-        // POST api/values
+        // POST api/posts
         [HttpPost]
         public async void Post([FromBody]CreateViewModel model)
         {
@@ -46,14 +46,14 @@ namespace BlogApp.API
             _postService.Create(model);
         }
 
-        // PUT api/values/5
+        // PUT api/posts/5
         [HttpPut("{id}")]
         public void Put(long id, [FromBody]UpdateViewModel model)
         {
             _postService.Update(model);
         }
 
-        // DELETE api/values/5
+        // DELETE api/posts/5
         [HttpDelete("{id}")]
         public void Delete(long id)
         {
