@@ -1,6 +1,6 @@
 ﻿using BlogApp.Data;
 using BlogApp.Models;
-using BlogApp.Models.PostViewModels;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,28 @@ namespace BlogApp.Services
             _dbContext = dbContext;
         }
 
+        public long Create(CommentCreateViewModel model)
+        {
+            var comment = _dbContext.Comments.Add(new Comment()
+            {
+                PostId = model.PostId,
+                CommentText = model.CommentText,
+                CommentDate = DateTime.Now,
+                User = model.User,
+            });
+            _dbContext.SaveChanges();
+            return comment.Entity.CommentId;
+        }
 
+        public void Delete(long id)
+        {
+            var comment = _dbContext.Comments.First(c => c.CommentId == id);
+            comment.IsDeleted = true;
+            _dbContext.SaveChanges();
+        }
     }
+
+
 
 
 }

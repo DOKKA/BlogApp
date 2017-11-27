@@ -8,7 +8,7 @@ using BlogApp.Models;
 using BlogApp.Data;
 using Microsoft.AspNetCore.Identity;
 using BlogApp.Services;
-using BlogApp.Models.PostViewModels;
+
 
 namespace BlogApp.API
 {
@@ -26,29 +26,30 @@ namespace BlogApp.API
 
         // GET api/posts
         [HttpGet]
-        public  IEnumerable<ListViewModel> Get()
+        public  IEnumerable<PostListViewModel> Get()
         {
             return _postService.GetAll();
         }
 
         // GET api/posts/5
         [HttpGet("{id}")]
-        public ListViewModel Get(long id)
+        public PostViewModel Get(long id)
         {
             return _postService.Get(id);
         }
 
         // POST api/posts
         [HttpPost]
-        public async void Post([FromBody]CreateViewModel model)
+        public async void Post([FromBody]PostCreateViewModel model)
         {
             model.User =  await _manager.GetUserAsync(User);
+            //model.User = await _manager.FindByEmailAsync("scuffmark@gmail.com");
             _postService.Create(model);
         }
 
         // PUT api/posts/5
         [HttpPut("{id}")]
-        public void Put(long id, [FromBody]UpdateViewModel model)
+        public void Put(long id, [FromBody]PostUpdateViewModel model)
         {
             _postService.Update(model);
         }
