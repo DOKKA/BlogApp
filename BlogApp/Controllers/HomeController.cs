@@ -29,6 +29,13 @@ namespace BlogApp.Controllers
             return View();
         }
 
+        public IActionResult Blog()
+        {
+            ViewData["Message"] = "Blog API Test page";
+
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
