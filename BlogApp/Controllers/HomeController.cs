@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BlogApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogApp.Controllers
 {
@@ -29,6 +30,7 @@ namespace BlogApp.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Blog()
         {
             ViewData["Message"] = "Blog API Test page";

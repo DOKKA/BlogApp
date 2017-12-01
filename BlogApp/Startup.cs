@@ -40,6 +40,7 @@ namespace BlogApp
             services.AddTransient<PostService>();
             services.AddTransient<CommentService>();
 
+            services.AddCors();
             services.AddMvc();
         }
 
@@ -58,6 +59,7 @@ namespace BlogApp
             }
 
             app.UseStaticFiles();
+            //app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthentication();
 
